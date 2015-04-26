@@ -1,2 +1,2 @@
 
-include "template", "source-module"
+include "spring-social-netatmo", "spring-xd-netatmo-source-module"
