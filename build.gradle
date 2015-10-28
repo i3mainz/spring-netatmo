@@ -3,21 +3,21 @@ subprojects {
     apply plugin: 'eclipse'
 
     repositories {
-       mavenCentral()
+        maven { url "http://repo.spring.io/release" }
+        jcenter()
+        maven { url "http://repo.spring.io/snapshot" }
+        maven { url "http://repo.spring.io/milestone" }
+        mavenCentral()
     }
 
-    dependencies {
-        testCompile 'junit:junit:4.8.2'
-    }
+    dependencies { testCompile 'junit:junit:4.8.2' }
 
     version = '1.0'
 
-    jar {
-        manifest.attributes provider: 'i3mainz'
-    }
+    jar { manifest.attributes provider: 'i3mainz' }
 }
 
 task wrapper(type: Wrapper) {
-	description = 'Generates gradlew[.bat] scripts'
-	gradleVersion = '2.3'
+    description = 'Generates gradlew[.bat] scripts'
+    gradleVersion = '2.8'
 }
