@@ -1,1 +1,1 @@
-include ":spring-social-netatmo", ":spring-xd-netatmo:spring-xd-netatmo-source-module"
+include ":spring-social-netatmo", ":spring-xd-netatmo:spring-xd-netatmo-source"
