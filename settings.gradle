@@ -1,1 +1,5 @@
-include ":spring-social-netatmo", ":spring-xd-netatmo:spring-xd-netatmo-source"
+rootProject.name = "spring-netatmo"
+
+include ":spring-social-netatmo"
+
+project(':spring-social-netatmo').projectDir = new File(settingsDir, 'social')
