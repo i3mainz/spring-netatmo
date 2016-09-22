@@ -1,11 +1,10 @@
 /**
  * 
  */
-package de.i3mainz.actonair.springframework.social.netatmo.connect;
+package org.springframework.social.netatmo.connect;
 
 import org.springframework.social.connect.support.OAuth2ConnectionFactory;
-
-import de.i3mainz.actonair.springframework.social.netatmo.api.Netatmo;
+import org.springframework.social.netatmo.api.Netatmo;
 
 /**
  * @author Nikolai Bock

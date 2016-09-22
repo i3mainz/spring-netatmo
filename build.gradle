@@ -1,4 +1,18 @@
-subprojects {
+plugins {
+    id "org.sonarqube" version "2.1-rc3"
+    id "io.spring.dependency-management" version "0.6.0.RELEASE" apply false
+    id "org.unbroken-dome.test-sets" version "1.2.0" apply false
+}
+
+description = 'Parent Project for netatmo services'
+group = 'de.i3mainz'
+version = version
+
+def javaProjects() { 
+  return subprojects.findAll { new File(it.projectDir, "src").exists() }
+} 
+
+configure(javaProjects()) {
     apply plugin: 'java'
     apply plugin: 'eclipse'
 
@@ -10,7 +24,7 @@ subprojects {
         mavenCentral()
     }
 
-    dependencies { testCompile 'junit:junit:4.8.2' }
+    dependencies { testCompile "junit:junit:$junitVersion" }
 
     version = '1.0'
 

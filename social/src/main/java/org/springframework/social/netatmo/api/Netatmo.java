@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.i3mainz.actonair.springframework.social.netatmo.api;
+package org.springframework.social.netatmo.api;
 
 import org.springframework.social.ApiBinding;
 
@@ -11,6 +11,6 @@ import org.springframework.social.ApiBinding;
  */
 public interface Netatmo extends ApiBinding {
     
-    DeviceOperations deviceOperations();
+    WeatherOperations weatherOperations();
 
 }

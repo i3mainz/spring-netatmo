@@ -1,4 +1,4 @@
-NetAtmo XD Modul
+Spring Netatmo
 ================
 
-Das NetAtmo Modul bietet den Zugriff auf die NetAtmo-API für Spring-XD Datenströme.
+Die Netatmo Module bieten den Zugriff auf die NetAtmo-API durch Spring Social, Spring Integration und Spring Cloud Stream.

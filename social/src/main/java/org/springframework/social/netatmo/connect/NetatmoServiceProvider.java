@@ -1,13 +1,11 @@
 /**
  * 
  */
-package de.i3mainz.actonair.springframework.social.netatmo.connect;
+package org.springframework.social.netatmo.connect;
 
+import org.springframework.social.netatmo.api.Netatmo;
+import org.springframework.social.netatmo.api.impl.NetatmoTemplate;
 import org.springframework.social.oauth2.AbstractOAuth2ServiceProvider;
-import org.springframework.social.oauth2.OAuth2Template;
-
-import de.i3mainz.actonair.springframework.social.netatmo.api.Netatmo;
-import de.i3mainz.actonair.springframework.social.netatmo.api.impl.NetatmoTemplate;
 
 /**
  * @author Nikolai Bock
@@ -17,7 +15,7 @@ public class NetatmoServiceProvider extends
         AbstractOAuth2ServiceProvider<Netatmo> {
 
     public NetatmoServiceProvider(String clientId, String clientSecret) {
-        super(new OAuth2Template(clientId, clientSecret,
+        super(new NetatmoOAuth2Template(clientId, clientSecret,
                 "https://api.netatmo.net/oauth2/authorize",
                 "https://api.netatmo.net/oauth2/token"));
     }
