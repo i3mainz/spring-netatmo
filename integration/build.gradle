@@ -1,0 +1,6 @@
+description = 'Spring Integration Netatmo Support'
+
+dependencies {
+	compile "org.springframework.integration:spring-integration-core:$springIntegrationVersion"
+	compile project(":spring-social-netatmo")
+}

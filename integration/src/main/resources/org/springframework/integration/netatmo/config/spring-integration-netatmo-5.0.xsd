@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://www.springframework.org/schema/integration/netatmo"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:tool="http://www.springframework.org/schema/tool"
+	xmlns:integration="http://www.springframework.org/schema/integration"
+	targetNamespace="http://www.springframework.org/schema/integration/netatmo"
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+	<xsd:import namespace="http://www.springframework.org/schema/beans" />
+	<xsd:import namespace="http://www.springframework.org/schema/tool" />
+	<xsd:import namespace="http://www.springframework.org/schema/integration"
+		schemaLocation="http://www.springframework.org/schema/integration/spring-integration-5.0.xsd" />
+
+	<!-- INBOUND -->
+
+	<xsd:element name="inbound-channel-adapter">
+		<xsd:annotation>
+			<xsd:documentation>
+				Defines a Polling Channel Adapter for the
+				'org.springframework.integration.netatmo.inbound.PublicWeatherReceivingMessageSource'
+				that consumes weather information from public available netatmo
+				weather stations and creates messages whose payloads are weather
+				station measurement
+				objects.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="inbound-netatmo-type">
+					<xsd:attribute name="latSW" type="xsd:double" use="required">
+						<xsd:annotation>
+							<xsd:documentation>
+								The latitude of the south/west bbox corner.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:attribute>
+					<xsd:attribute name="lonSW" type="xsd:double" use="required">
+						<xsd:annotation>
+							<xsd:documentation>
+								The longitude of the south/west bbox corner.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:attribute>
+					<xsd:attribute name="latNE" type="xsd:double" use="required">
+						<xsd:annotation>
+							<xsd:documentation>
+								The latitude of the north/east bbox corner.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:attribute>
+					<xsd:attribute name="lonNE" type="xsd:double" use="required">
+						<xsd:annotation>
+							<xsd:documentation>
+								The longitude of the north/east bbox corner.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:attribute>
+					<xsd:attribute name="required-data" type="xsd:string"
+						use="optional">
+						<xsd:annotation>
+							<xsd:documentation>
+								To filter stations based on relevant
+								measurements you want (e.g. rain will only return stations with
+								rain gauges). Give measurements in comma-separated list. Default
+								is no filter.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:attribute>
+					<xsd:attribute name="filter" type="xsd:boolean" use="optional">
+						<xsd:annotation>
+							<xsd:documentation>
+								True to exclude station with abnormal
+								temperature measures. Default is false.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:attribute>
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+
+
+	<xsd:complexType name="inbound-netatmo-type">
+		<xsd:sequence>
+			<xsd:element ref="integration:poller" minOccurs="0"
+				maxOccurs="1" />
+		</xsd:sequence>
+		<xsd:attribute name="id" type="xsd:string" use="required">
+			<xsd:annotation>
+				<xsd:documentation>
+					The bean id of this Polling Endpoint; the
+					MessageSource is also registered with this id
+					plus a suffix
+					'.source'; also used as the
+					MetaDataStore key with suffix '.' + the
+					profileId from the authorized netatmo user.
+				</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="channel" type="xsd:string">
+			<xsd:annotation>
+				<xsd:appinfo>
+					<tool:annotation kind="ref">
+						<tool:expected-type type="org.springframework.messaging.MessageChannel" />
+					</tool:annotation>
+				</xsd:appinfo>
+				<xsd:documentation>
+					Identifies the channel the attached to this
+					adapter, to which messages will be sent.
+				</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attributeGroup ref="integration:smartLifeCycleAttributeGroup" />
+		<xsd:attribute name="netatmo-template" type="xsd:string"
+			use="required">
+			<xsd:annotation>
+				<xsd:appinfo>
+					<tool:annotation kind="ref">
+						<tool:expected-type
+							type="org.springframework.social.netatmo.api.Netatmo" />
+					</tool:annotation>
+				</xsd:appinfo>
+				<xsd:documentation>
+					Reference to a NetatmoTemplate bean provided by
+					the Spring Social project.
+				</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="metadata-store" use="optional"
+			type="xsd:string">
+			<xsd:annotation>
+				<xsd:documentation>
+					Reference to a MetadataStore instance for storing
+					metadata associated with
+					the retrieved measurements. If the
+					implementation
+					is persistent, it can help to
+					prevent duplicates
+					between restarts.
+					If shared, it can help coordinate multiple
+					instances of an adapter
+					across different processes.
+				</xsd:documentation>
+				<xsd:appinfo>
+					<tool:annotation kind="ref">
+						<tool:expected-type
+							type="org.springframework.integration.metadata.MetadataStore" />
+					</tool:annotation>
+				</xsd:appinfo>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:complexType>
+</xsd:schema>
