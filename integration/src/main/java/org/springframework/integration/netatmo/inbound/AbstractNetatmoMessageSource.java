@@ -19,6 +19,7 @@ import org.springframework.jmx.export.annotation.ManagedOperation;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessagingException;
 import org.springframework.social.netatmo.api.Netatmo;
+import org.springframework.social.netatmo.api.WeatherStationMeasurement;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -123,8 +124,8 @@ public abstract class AbstractNetatmoMessageSource<T>
         return null;
     }
 
-    private void enqueueAll(List<T> tweets) {
-        tweets.stream().sorted(comparator).forEach(this::enqueue);
+    private void enqueueAll(List<T> measurements) {
+        measurements.stream().sorted(comparator).forEach(this::enqueue);
     }
 
     private void enqueue(T measurement) {
@@ -148,15 +149,16 @@ public abstract class AbstractNetatmoMessageSource<T>
         } catch (RuntimeException e) {
             throw e;
         } catch (Exception e) {
-            throw new MessagingException("failed while polling Twitter", e);
+            throw new MessagingException("failed while polling Netatmo", e);
         }
     }
 
     protected abstract List<T> pollForMeasurements(long sinceId);
 
     private long getIdForMeasurement(T netatmoMessage) {
-        if (netatmoMessage instanceof String) {
-            return netatmoMessage.toString().length();
+        if (netatmoMessage instanceof WeatherStationMeasurement) {
+            return Long.getLong(((WeatherStationMeasurement) netatmoMessage)
+                    .getId().split("||")[1]);
         } else {
             throw new IllegalArgumentException(
                     "Unsupported Netatmo object: " + netatmoMessage);
@@ -193,6 +195,11 @@ public abstract class AbstractNetatmoMessageSource<T>
                     && measurement2 instanceof String) {
                 return measurement1.toString()
                         .compareTo(measurement2.toString());
+            } else if (measurement1 instanceof WeatherStationMeasurement
+                    && measurement2 instanceof WeatherStationMeasurement) {
+                Long m1 = getLong((WeatherStationMeasurement) measurement1);
+                Long m2 = getLong((WeatherStationMeasurement) measurement2);
+                return m1.compareTo(m2);
             } else {
                 throw new IllegalArgumentException(
                         "Uncomparable netatmo measurement objects: "
@@ -200,6 +207,9 @@ public abstract class AbstractNetatmoMessageSource<T>
             }
         }
 
+        private Long getLong(WeatherStationMeasurement measurement) {
+            return Long.getLong(measurement.getId().split("||")[1]);
+        }
     }
 
 }

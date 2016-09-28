@@ -7,13 +7,14 @@ import java.util.List;
 
 import org.springframework.social.netatmo.api.Netatmo;
 import org.springframework.social.netatmo.api.PublicWeatherParameter;
+import org.springframework.social.netatmo.api.WeatherStationMeasurement;
 
 /**
  * @author Nikolai Bock
  *
  */
 public class PublicWeatherReceivingMessageSource
-        extends AbstractNetatmoMessageSource<String> {
+        extends AbstractNetatmoMessageSource<WeatherStationMeasurement> {
 
     private volatile double latSW;
     private volatile double lonSW;
@@ -75,14 +76,8 @@ public class PublicWeatherReceivingMessageSource
         this.filter = filter;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.springframework.integration.netatmo.inbound.
-     * AbstractNetatmoMessageSource#pollForMeasurements(long)
-     */
     @Override
-    protected List<String> pollForMeasurements(long sinceId) {
+    protected List<WeatherStationMeasurement> pollForMeasurements(long sinceId) {
         return this.getNetatmo().weatherOperations().getPublicWeather(
                 new PublicWeatherParameter(lonSW, latSW, lonNE, latNE)
                         .requiredData(requiredData).filter(filter));
