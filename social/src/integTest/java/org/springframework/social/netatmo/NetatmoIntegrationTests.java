@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.social.netatmo.api.Netatmo;
+import org.springframework.social.netatmo.api.WeatherStationMeasurement;
 import org.springframework.social.netatmo.connect.NetatmoServiceProvider;
 import org.springframework.social.oauth2.AccessGrant;
 import org.springframework.social.oauth2.OAuth2Operations;
@@ -42,9 +43,21 @@ public class NetatmoIntegrationTests {
 
     @Test
     public void publicWeatherDataTest() {
-        List<String> test = clientNetatmo.weatherOperations().getPublicWeather(
-                49.999234, 8.223434, 50.0034234, 8.235423, null, null);
-        test.stream().map(s -> "TESTJSON: " + s).forEach(System.out::println);
+        List<WeatherStationMeasurement> test = clientNetatmo.weatherOperations()
+                .getPublicWeather(49.999234, 8.223434, 50.0034234, 8.235423,
+                        null, null);
+
+        test.stream().forEach(this::print);
+
+    }
+
+    private void print(WeatherStationMeasurement station) {
+        System.out.println(station.getId());
+        System.out.println(station.getLocation().toText());
+        station.getMeasurements().stream()
+                .map(m -> m.getProperty() + ": " + m.getValue() + " "
+                        + m.getUom() + " um " + m.getDate())
+                .forEach(System.out::println);
     }
 
 }

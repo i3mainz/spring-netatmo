@@ -11,9 +11,9 @@ import java.util.List;
  */
 public interface WeatherOperations {
     
-    public List<String> getPublicWeather(PublicWeatherParameter parameter);
+    public List<WeatherStationMeasurement> getPublicWeather(PublicWeatherParameter parameter);
 
-    public List<String> getPublicWeather(double latSW, double lonSW, double latNE,
+    public List<WeatherStationMeasurement> getPublicWeather(double latSW, double lonSW, double latNE,
             double lonNE, List<String> required_data, Boolean filter);
 
 }

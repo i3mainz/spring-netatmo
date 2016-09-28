@@ -25,6 +25,7 @@ integTest{
 dependencies{
     compile ("org.springframework.social:spring-social-core:$springSocialVersion")
     compile ("org.springframework.social:spring-social-config:$springSocialVersion")
+    compile group: 'com.vividsolutions', name: 'jts', version: "$jtsVersion"
     optional ("org.springframework.social:spring-social-security:$springSocialVersion")
     testCompile "org.springframework:spring-test:$springVersion"
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.8.3'
