@@ -2,6 +2,8 @@ rootProject.name = "spring-netatmo"
 
 include ":spring-social-netatmo"
 include ":spring-integration-netatmo"
+include ":spring-cloud-starter-stream-source-netatmo"
 
 project(':spring-social-netatmo').projectDir = new File(settingsDir, 'social')
 project(':spring-integration-netatmo').projectDir = new File(settingsDir, 'integration')
+project(':spring-cloud-starter-stream-source-netatmo').projectDir = new File(settingsDir, 'cloud/stream/source')
