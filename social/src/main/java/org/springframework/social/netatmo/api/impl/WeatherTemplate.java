@@ -67,11 +67,13 @@ public class WeatherTemplate extends AbstractTemplate
     private WeatherStationMeasurement mapEntry(Map<?, ?> entry) {
         Map<?, ?> pos = (Map<?, ?>) entry.get("place");
         String idPrefix = entry.get("_id").toString();
-        List<Double> lage = (List<Double>) pos.get("location");
+        List<Number> lage = (List<Number>) pos.get("location");
+        double x = lage.get(0).doubleValue();
+        double y = lage.get(1).doubleValue();
         Number altitude = (Number) pos.get("altitude");
         String timezone = (String) pos.get("timezone");
-        Point location = geometryFactory.createPoint(new Coordinate(lage.get(0),
-                lage.get(1), altitude.doubleValue()));
+        Point location = geometryFactory
+                .createPoint(new Coordinate(x, y, altitude.doubleValue()));
         Collection<Map<?, ?>> measures = ((Map<?, Map<?, ?>>) entry
                 .get("measures")).values();
         List<Measurement> measurements = Stream

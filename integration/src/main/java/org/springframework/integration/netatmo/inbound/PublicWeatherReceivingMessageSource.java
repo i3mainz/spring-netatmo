@@ -9,6 +9,8 @@ import org.springframework.social.netatmo.api.Netatmo;
 import org.springframework.social.netatmo.api.PublicWeatherParameter;
 import org.springframework.social.netatmo.api.WeatherStationMeasurement;
 
+import com.vividsolutions.jts.util.Assert;
+
 /**
  * @author Nikolai Bock
  *
@@ -16,16 +18,40 @@ import org.springframework.social.netatmo.api.WeatherStationMeasurement;
 public class PublicWeatherReceivingMessageSource
         extends AbstractNetatmoMessageSource<WeatherStationMeasurement> {
 
-    private volatile double latSW;
-    private volatile double lonSW;
-    private volatile double latNE;
-    private volatile double lonNE;
+    private volatile Double latSW;
+    private volatile Double lonSW;
+    private volatile Double latNE;
+    private volatile Double lonNE;
     private volatile List<String> requiredData;
     private volatile Boolean filter;
+    private volatile PublicWeatherParameter parameter;
 
     public PublicWeatherReceivingMessageSource(Netatmo netatmo,
             String metadataKey) {
         super(netatmo, metadataKey);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.springframework.integration.netatmo.inbound.
+     * AbstractNetatmoMessageSource#onInit()
+     */
+    @Override
+    protected void onInit() throws Exception {
+        super.onInit();
+
+        if (parameter == null) {
+            Assert.isTrue(bboxIsNull(), "The bounding box has to set!");
+            this.parameter = new PublicWeatherParameter(this.lonSW, this.latSW,
+                    this.lonNE, this.latNE).requiredData(requiredData)
+                            .filter(filter);
+        }
+    }
+
+    private boolean bboxIsNull() {
+        return this.latSW == null || this.lonSW == null || this.lonNE == null
+                || this.latNE == null;
     }
 
     /**
@@ -76,11 +102,18 @@ public class PublicWeatherReceivingMessageSource
         this.filter = filter;
     }
 
-    @Override
-    protected List<WeatherStationMeasurement> pollForMeasurements(long sinceId) {
-        return this.getNetatmo().weatherOperations().getPublicWeather(
-                new PublicWeatherParameter(lonSW, latSW, lonNE, latNE)
-                        .requiredData(requiredData).filter(filter));
+    /**
+     * @param parameter
+     *            the parameter to set
+     */
+    public void setParameter(PublicWeatherParameter parameter) {
+        this.parameter = parameter;
     }
 
+    @Override
+    protected List<WeatherStationMeasurement> pollForMeasurements(
+            long sinceId) {
+        return this.getNetatmo().weatherOperations()
+                .getPublicWeather(this.parameter);
+    }
 }

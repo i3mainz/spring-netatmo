@@ -3,6 +3,7 @@
  */
 package org.springframework.integration.netatmo.inbound;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Queue;
@@ -157,7 +158,7 @@ public abstract class AbstractNetatmoMessageSource<T>
 
     private long getIdForMeasurement(T netatmoMessage) {
         if (netatmoMessage instanceof WeatherStationMeasurement) {
-            return Long.getLong(((WeatherStationMeasurement) netatmoMessage)
+            return new Long(((WeatherStationMeasurement) netatmoMessage)
                     .getId().split("||")[1]);
         } else {
             throw new IllegalArgumentException(
@@ -208,7 +209,7 @@ public abstract class AbstractNetatmoMessageSource<T>
         }
 
         private Long getLong(WeatherStationMeasurement measurement) {
-            return Long.getLong(measurement.getId().split("||")[1]);
+            return new Long(measurement.getId().split("\\|\\|")[1]);
         }
     }
 
