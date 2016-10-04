@@ -28,7 +28,8 @@ integTest{
 
 dependencies {
 	compile project (':spring-integration-netatmo')
-    compile('org.springframework.cloud.stream.app:app-starters-annotation-common')
+    compile('org.springframework.cloud.stream.app:app-starters-trigger-unlimited-common')
+    compile('org.springframework.security:spring-security-core')
     optional('org.springframework.boot:spring-boot-configuration-processor')
     integTestCompile('org.springframework.cloud:spring-cloud-stream-test-support')
 }
