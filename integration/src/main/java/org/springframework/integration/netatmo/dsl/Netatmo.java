@@ -11,7 +11,7 @@ import org.springframework.social.netatmo.api.PublicWeatherParameter;
  * @author Nikolai Bock
  *
  */
-public abstract class Netatmo {
+public interface Netatmo {
 
     public static NetatmoInboundChannelAdapterSpec inboundAdapter(
             org.springframework.social.netatmo.api.Netatmo netatmo,

@@ -3,7 +3,6 @@
  */
 package org.springframework.integration.netatmo.inbound;
 
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Queue;
@@ -36,7 +35,7 @@ public abstract class AbstractNetatmoMessageSource<T>
     private final Object lastEnqueuedIdMonitor = new Object();
     private final String metadataKey;
     private volatile MetadataStore metadataStore;
-    private final Queue<T> measurements = new LinkedBlockingQueue<T>();
+    private final Queue<T> measurements = new LinkedBlockingQueue<>();
     private volatile int prefetchThreshold = 0;
     private volatile long lastEnqueuedId = -1;
     private volatile long lastProcessedId = -1;
@@ -48,13 +47,8 @@ public abstract class AbstractNetatmoMessageSource<T>
         Assert.notNull(netatmo, "netatmo must not be null");
         Assert.notNull(metadataKey, "metadataKey must not be null");
         this.netatmo = netatmo;
-        // if (this.netatmo.isAuthorized()) {
-        // UserOperations userOperations = this.twitter.userOperations();
-        // String profileId = String.valueOf(userOperations.getProfileId());
-        // if (profileId != null) {
-        // metadataKey += "." + profileId;
-        // }
-        // }
+        // TODO Metadatakey sollte hier noch um eine UserID erweitert werden,
+        // welche am besten von Spring Social kommt.
         this.metadataKey = metadataKey;
     }
 
@@ -125,8 +119,8 @@ public abstract class AbstractNetatmoMessageSource<T>
         return null;
     }
 
-    private void enqueueAll(List<T> measurements) {
-        measurements.stream().sorted(comparator).forEach(this::enqueue);
+    private void enqueueAll(List<T> ms) {
+        ms.stream().sorted(comparator).forEach(this::enqueue);
     }
 
     private void enqueue(T measurement) {
@@ -142,9 +136,9 @@ public abstract class AbstractNetatmoMessageSource<T>
     private void refreshMeasurementQueueIfNecessary() {
         try {
             if (this.measurements.size() <= this.prefetchThreshold) {
-                List<T> measurements = pollForMeasurements(this.lastEnqueuedId);
-                if (!CollectionUtils.isEmpty(measurements)) {
-                    enqueueAll(measurements);
+                List<T> ms = pollForMeasurements(this.lastEnqueuedId);
+                if (!CollectionUtils.isEmpty(ms)) {
+                    enqueueAll(ms);
                 }
             }
         } catch (RuntimeException e) {
@@ -158,8 +152,8 @@ public abstract class AbstractNetatmoMessageSource<T>
 
     private long getIdForMeasurement(T netatmoMessage) {
         if (netatmoMessage instanceof WeatherStationMeasurement) {
-            return new Long(((WeatherStationMeasurement) netatmoMessage)
-                    .getId().split("||")[1]);
+            return new Long(((WeatherStationMeasurement) netatmoMessage).getId()
+                    .split("||")[1]);
         } else {
             throw new IllegalArgumentException(
                     "Unsupported Netatmo object: " + netatmoMessage);

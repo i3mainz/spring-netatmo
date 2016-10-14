@@ -15,8 +15,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.dsl.IntegrationFlows;
-import org.springframework.integration.dsl.SourcePollingChannelAdapterSpec;
-import org.springframework.integration.dsl.support.Consumer;
 import org.springframework.integration.netatmo.dsl.Netatmo;
 import org.springframework.integration.netatmo.dsl.NetatmoInboundChannelAdapterSpec;
 import org.springframework.integration.scheduling.PollerMetadata;
@@ -51,16 +49,9 @@ public class NetatmoSourceConfiguration {
                         properties.getLonNE(), properties.getRequiredData(),
                         properties.getFilter());
 
-        return IntegrationFlows.from(messageSourceSpec,
-                new Consumer<SourcePollingChannelAdapterSpec>() {
-
-                    @Override
-                    public void accept(
-                            SourcePollingChannelAdapterSpec sourcePollingChannelAdapterSpec) {
-                        sourcePollingChannelAdapterSpec.poller(defaultPoller);
-                    }
-
-                }).channel(Source.OUTPUT).get();
+        return IntegrationFlows
+                .from(messageSourceSpec, spec -> spec.poller(defaultPoller))
+                .channel(Source.OUTPUT).get();
     }
 
     @Bean
