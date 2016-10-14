@@ -9,15 +9,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.boot.test.WebIntegrationTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.cloud.stream.annotation.Bindings;
 import org.springframework.cloud.stream.messaging.Source;
 import org.springframework.cloud.stream.test.binder.MessageCollector;
 import org.springframework.messaging.Message;
 import org.springframework.social.netatmo.api.WeatherStationMeasurement;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -27,10 +26,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
  * @author Nikolai Bock
  *
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = NetatmoSourceIntegrationTests.UBAProcessorApplication.class)
-@WebIntegrationTest(randomPort = true)
-@DirtiesContext
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = NetatmoSourceIntegrationTests.UBAProcessorApplication.class, webEnvironment=WebEnvironment.RANDOM_PORT)
 public abstract class NetatmoSourceIntegrationTests {
 
     @Autowired
@@ -40,7 +37,7 @@ public abstract class NetatmoSourceIntegrationTests {
     @Autowired
     protected MessageCollector messageCollector;
 
-    @WebIntegrationTest
+    @SpringBootTest
     public static class TestUBAStandardRequest
             extends NetatmoSourceIntegrationTests {
 
