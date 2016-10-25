@@ -21,13 +21,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 /**
- * Some nice integration tests UBA processor
+ * Some nice integration tests Netatmo processor
  * 
  * @author Nikolai Bock
  *
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = NetatmoSourceIntegrationTests.UBAProcessorApplication.class, webEnvironment=WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = NetatmoSourceIntegrationTests.Application.class, webEnvironment=WebEnvironment.RANDOM_PORT)
 public abstract class NetatmoSourceIntegrationTests {
 
     @Autowired
@@ -53,7 +53,7 @@ public abstract class NetatmoSourceIntegrationTests {
     }
 
     @SpringBootApplication
-    public static class UBAProcessorApplication {
+    public static class Application {
 
     }
 }
